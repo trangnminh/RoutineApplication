@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragments.routine.RoutinesFragment">
+    tools:context=".view.routine.RoutinesFragment">
 
     <TextView
         android:layout_width="match_parent"

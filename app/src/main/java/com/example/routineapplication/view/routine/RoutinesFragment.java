@@ -1,4 +1,4 @@
-package com.example.routineapplication.fragments.routine;
+package com.example.routineapplication.view.routine;
 
 import android.content.DialogInterface;
 import android.os.Bundle;

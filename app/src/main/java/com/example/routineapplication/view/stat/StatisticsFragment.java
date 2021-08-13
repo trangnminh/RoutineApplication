@@ -1,4 +1,4 @@
-package com.example.routineapplication.fragments.stat;
+package com.example.routineapplication.view.stat;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

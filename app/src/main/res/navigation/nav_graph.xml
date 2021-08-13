@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/routinesFragment"
-        android:name="com.example.routineapplication.fragments.routine.RoutinesFragment"
+        android:name="com.example.routineapplication.view.routine.RoutinesFragment"
         android:label=""
         tools:layout="@layout/fragment_routines">
         <action
@@ -19,12 +19,12 @@
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
-        android:name="com.example.routineapplication.fragments.stat.StatisticsFragment"
+        android:name="com.example.routineapplication.view.stat.StatisticsFragment"
         android:label="Statistics"
         tools:layout="@layout/fragment_statistics" />
     <fragment
         android:id="@+id/addRoutineFragment"
-        android:name="com.example.routineapplication.fragments.routine.AddRoutineFragment"
+        android:name="com.example.routineapplication.view.routine.AddRoutineFragment"
         android:label="Add new routine"
         tools:layout="@layout/fragment_add_routine">
         <action
@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/editRoutineFragment"
-        android:name="com.example.routineapplication.fragments.routine.EditRoutineFragment"
+        android:name="com.example.routineapplication.view.routine.EditRoutineFragment"
         android:label="Edit routine"
         tools:layout="@layout/fragment_edit_routine">
         <action

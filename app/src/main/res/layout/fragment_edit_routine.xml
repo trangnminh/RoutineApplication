@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragments.routine.EditRoutineFragment">
+    tools:context=".view.routine.EditRoutineFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edit_routine_name"

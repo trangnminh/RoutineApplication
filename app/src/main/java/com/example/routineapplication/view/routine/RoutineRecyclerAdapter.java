@@ -1,4 +1,4 @@
-package com.example.routineapplication.fragments.routine;
+package com.example.routineapplication.view.routine;
 
 import android.view.LayoutInflater;
 import android.view.View;
