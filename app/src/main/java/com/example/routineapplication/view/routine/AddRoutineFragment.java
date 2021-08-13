@@ -18,8 +18,8 @@ import com.google.android.material.textfield.TextInputLayout;
 
 public class AddRoutineFragment extends Fragment {
 
-    TextInputLayout name;
-    TextInputLayout description;
+    TextInputLayout nameInput;
+    TextInputLayout descriptionInput;
     Button addButton;
 
     private RoutineViewModel mViewModel;
@@ -35,8 +35,8 @@ public class AddRoutineFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_routine, container, false);
 
         // Set up misc views
-        name = view.findViewById(R.id.add_routine_name);
-        description = view.findViewById(R.id.add_routine_description);
+        nameInput = view.findViewById(R.id.add_routine_name);
+        descriptionInput = view.findViewById(R.id.add_routine_description);
         addButton = view.findViewById(R.id.add_routine_button);
 
         // Set up View Model
@@ -46,17 +46,17 @@ public class AddRoutineFragment extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String newName = name.getEditText().getText().toString();
+                String name = nameInput.getEditText().getText().toString();
 
                 // Show error if name is empty
-                if (newName.isEmpty())
-                    name.setError(getString(R.string.empty_error));
+                if (name.isEmpty())
+                    nameInput.setError(getString(R.string.empty_error));
                 else {
                     // Save routine to database
-                    String newDescription = description.getEditText().getText().toString();
-                    Routine newRoutine = new Routine(newName, newDescription);
+                    String description = descriptionInput.getEditText().getText().toString();
+                    Routine routine = new Routine(name, description);
 
-                    mViewModel.insert(newRoutine);
+                    mViewModel.insert(routine);
                     Toast.makeText(requireContext(), getString(R.string.routine_added), Toast.LENGTH_SHORT).show();
 
                     // Return to RoutinesFragment

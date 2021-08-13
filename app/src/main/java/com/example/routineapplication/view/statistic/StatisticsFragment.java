@@ -1,4 +1,4 @@
-package com.example.routineapplication.view.stat;
+package com.example.routineapplication.view.statistic;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

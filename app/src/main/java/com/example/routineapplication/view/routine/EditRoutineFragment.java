@@ -18,8 +18,8 @@ import com.google.android.material.textfield.TextInputLayout;
 
 public class EditRoutineFragment extends Fragment {
 
-    TextInputLayout name;
-    TextInputLayout description;
+    TextInputLayout nameInput;
+    TextInputLayout descriptionInput;
     Button saveButton;
 
     private Routine mRoutine;
@@ -44,13 +44,13 @@ public class EditRoutineFragment extends Fragment {
         }
 
         // Set up misc views
-        name = view.findViewById(R.id.edit_routine_name);
-        description = view.findViewById(R.id.edit_routine_description);
+        nameInput = view.findViewById(R.id.edit_routine_name);
+        descriptionInput = view.findViewById(R.id.edit_routine_description);
         saveButton = view.findViewById(R.id.edit_routine_button);
 
         // Populate form fields
-        name.getEditText().setText(mRoutine.getName());
-        description.getEditText().setText(mRoutine.getDescription());
+        nameInput.getEditText().setText(mRoutine.getName());
+        descriptionInput.getEditText().setText(mRoutine.getDescription());
 
         // Set up View Model
         mViewModel = new ViewModelProvider(this).get(RoutineViewModel.class);
@@ -60,16 +60,16 @@ public class EditRoutineFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // Gather edited input
-                String newName = name.getEditText().getText().toString();
-                String newDescription = description.getEditText().getText().toString();
+                String name = nameInput.getEditText().getText().toString();
+                String description = descriptionInput.getEditText().getText().toString();
 
                 // Do input check
-                if (newName.isEmpty())
-                    name.setError(getString(R.string.empty_error));
+                if (name.isEmpty())
+                    nameInput.setError(getString(R.string.empty_error));
                 else {
                     // Edit current routine
-                    mRoutine.setName(newName);
-                    mRoutine.setDescription(newDescription);
+                    mRoutine.setName(name);
+                    mRoutine.setDescription(description);
 
                     // Update in database and tell user
                     mViewModel.update(mRoutine);

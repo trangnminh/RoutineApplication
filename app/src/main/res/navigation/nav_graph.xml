@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
-        android:name="com.example.routineapplication.view.stat.StatisticsFragment"
+        android:name="com.example.routineapplication.view.statistic.StatisticsFragment"
         android:label="Statistics"
         tools:layout="@layout/fragment_statistics" />
     <fragment

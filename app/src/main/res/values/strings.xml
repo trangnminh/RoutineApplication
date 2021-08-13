@@ -26,5 +26,6 @@
     <string name="routine_saved">Routine saved!</string>
     <string name="routine_deleted">Routine deleted!</string>
     <string name="routine_recycler_indicator_desc">Bottom indicator for scrolling</string>
+    <string name="wow_such_empty">Wow, such empty</string>
 
 </resources>

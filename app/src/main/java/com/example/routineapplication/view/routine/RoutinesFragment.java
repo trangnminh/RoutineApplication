@@ -31,6 +31,7 @@ public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter
     TextView totalRoutines;
     FloatingActionButton fab;
     ImageView bottomIndicator;
+    TextView wowSuchEmpty;
 
     RecyclerView recyclerView;
     RoutineRecyclerAdapter mAdapter;
@@ -67,17 +68,25 @@ public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter
         totalRoutines = view.findViewById(R.id.total_routines);
         fab = view.findViewById(R.id.routine_fab);
         bottomIndicator = view.findViewById(R.id.routine_recycler_indicator);
+        wowSuchEmpty = view.findViewById(R.id.wow_such_empty);
 
         // Set up View Model (must do before Recycler View)
         mViewModel = new ViewModelProvider(this).get(RoutineViewModel.class);
         mViewModel.getAll().observe(getViewLifecycleOwner(), new Observer<List<Routine>>() {
             @Override
             public void onChanged(List<Routine> routines) {
-                // Update data
+                // Update cached data
                 mAdapter.setRoutines(routines);
 
                 // Update UI
-                totalRoutines.setText(String.valueOf(mAdapter.getItemCount()));
+                int itemCount = mAdapter.getItemCount();
+
+                if (itemCount == 0)
+                    wowSuchEmpty.setVisibility(View.VISIBLE);
+                else
+                    wowSuchEmpty.setVisibility(View.GONE);
+
+                totalRoutines.setText(String.valueOf(itemCount));
             }
         });
 
@@ -94,9 +103,10 @@ public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE)
+                if (!recyclerView.canScrollVertically(1)
+                        && newState == RecyclerView.SCROLL_STATE_IDLE)
                     bottomIndicator.setVisibility(View.INVISIBLE);
-                else
+                else if (mAdapter.getItemCount() != 0)
                     bottomIndicator.setVisibility(View.VISIBLE);
             }
         });
