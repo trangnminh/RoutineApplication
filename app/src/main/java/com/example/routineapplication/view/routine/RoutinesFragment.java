@@ -1,17 +1,13 @@
 package com.example.routineapplication.view.routine;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -20,21 +16,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.routineapplication.R;
 import com.example.routineapplication.model.Routine;
+import com.example.routineapplication.service.AlarmHandler;
 import com.example.routineapplication.viewmodel.RoutineViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.List;
 
 public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter.RoutineRecyclerCallback {
 
     TextView totalRoutines;
     FloatingActionButton fab;
-    ImageView bottomIndicator;
     TextView wowSuchEmpty;
 
     RecyclerView recyclerView;
     RoutineRecyclerAdapter mAdapter;
+
+    private AlarmHandler mAlarmHandler;
 
     private RoutineViewModel mViewModel;
 
@@ -48,13 +44,10 @@ public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter
 
         // Moved to onStart because onCreate only inflates the view
         // and haven't set up the NavController
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Navigate to AddRoutineFragment
-                Navigation.findNavController(view)
-                        .navigate(R.id.action_routinesFragment_to_addRoutineFragment);
-            }
+        fab.setOnClickListener(view -> {
+            // Navigate to AddRoutineFragment
+            Navigation.findNavController(view)
+                    .navigate(R.id.action_routinesFragment_to_addRoutineFragment);
         });
     }
 
@@ -67,49 +60,36 @@ public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter
         // Set up misc view
         totalRoutines = view.findViewById(R.id.total_routines);
         fab = view.findViewById(R.id.routine_fab);
-        bottomIndicator = view.findViewById(R.id.routine_recycler_indicator);
         wowSuchEmpty = view.findViewById(R.id.wow_such_empty);
 
         // Set up View Model (must do before Recycler View)
         mViewModel = new ViewModelProvider(this).get(RoutineViewModel.class);
-        mViewModel.getAll().observe(getViewLifecycleOwner(), new Observer<List<Routine>>() {
-            @Override
-            public void onChanged(List<Routine> routines) {
-                // Update cached data
-                mAdapter.setRoutines(routines);
 
-                // Update UI
-                int itemCount = mAdapter.getItemCount();
+        // Set up AlarmReceiver
+        mAlarmHandler = new AlarmHandler();
 
-                if (itemCount == 0)
-                    wowSuchEmpty.setVisibility(View.VISIBLE);
-                else
-                    wowSuchEmpty.setVisibility(View.GONE);
+        // Observe and react to data change (in ViewModel.getAll())
+        mViewModel.getAll().observe(getViewLifecycleOwner(), routines -> {
+            // Update cached data
+            mAdapter.setRoutines(routines);
 
-                totalRoutines.setText(String.valueOf(itemCount));
-            }
+            // Update UI
+            int itemCount = mAdapter.getItemCount();
+
+            if (itemCount == 0)
+                wowSuchEmpty.setVisibility(View.VISIBLE);
+            else
+                wowSuchEmpty.setVisibility(View.GONE);
+
+            totalRoutines.setText(String.valueOf(itemCount));
         });
 
         // Set up Recycler View
-        recyclerView = (RecyclerView) view.findViewById(R.id.routine_recycler);
+        recyclerView = view.findViewById(R.id.routine_recycler);
         mAdapter = new RoutineRecyclerAdapter(mViewModel.getAll().getValue(), this);
 
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        // Show indicator if not yet scrolled to bottom
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-                if (!recyclerView.canScrollVertically(1)
-                        && newState == RecyclerView.SCROLL_STATE_IDLE)
-                    bottomIndicator.setVisibility(View.INVISIBLE);
-                else if (mAdapter.getItemCount() != 0)
-                    bottomIndicator.setVisibility(View.VISIBLE);
-            }
-        });
 
         // Inflate the layout for this fragment
         return view;
@@ -131,25 +111,18 @@ public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter
         String routineName = routine.getName();
 
         // Alert dialog to confirm delete
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
 
         builder.setTitle("Delete " + routineName + "?")
                 .setMessage(getString(R.string.cannot_undo))
-                .setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // Delete the routine
-                        mViewModel.delete(routine);
-                        mAdapter.notifyItemRemoved(position);
-                        Toast.makeText(requireContext(), getString(R.string.routine_deleted), Toast.LENGTH_SHORT).show();
-                    }
+                .setPositiveButton(getString(R.string.delete), (dialogInterface, i) -> {
+                    // Delete the routine and its alarm
+                    mViewModel.delete(routine);
+                    mAlarmHandler.cancelAlarm(requireContext(), routine.getId());
+                    mAdapter.notifyItemRemoved(position);
+                    Toast.makeText(requireContext(), getString(R.string.routine_deleted), Toast.LENGTH_SHORT).show();
                 })
-                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                });
+                .setNegativeButton(getString(R.string.cancel), (dialogInterface, i) -> dialogInterface.cancel());
 
         builder.create().show();
     }

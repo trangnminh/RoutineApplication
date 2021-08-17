@@ -26,19 +26,12 @@
         android:id="@+id/addRoutineFragment"
         android:name="com.example.routineapplication.view.routine.AddRoutineFragment"
         android:label="Add new routine"
-        tools:layout="@layout/fragment_add_routine">
-        <action
-            android:id="@+id/action_addRoutineFragment_to_routinesFragment"
-            app:destination="@id/routinesFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_add_routine" />
     <fragment
         android:id="@+id/editRoutineFragment"
         android:name="com.example.routineapplication.view.routine.EditRoutineFragment"
         android:label="Edit routine"
         tools:layout="@layout/fragment_edit_routine">
-        <action
-            android:id="@+id/action_editRoutineFragment_to_routinesFragment"
-            app:destination="@id/routinesFragment" />
         <argument
             android:name="routine"
             app:argType="com.example.routineapplication.model.Routine" />

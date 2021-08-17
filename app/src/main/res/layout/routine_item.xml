@@ -15,7 +15,6 @@
         android:focusable="true"
         app:cardElevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -38,7 +37,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/routine"
-                    android:textAppearance="?attr/textAppearanceHeadline6" />
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
                 <TextView
                     android:id="@+id/routine_card_description"
@@ -46,8 +45,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_xs"
                     android:text="@string/description"
-                    android:textAppearance="?attr/textAppearanceBody2"
-                    android:textColor="?android:attr/textColorSecondary" />
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body2" />
+
+                <TextView
+                    android:id="@+id/routine_card_schedule"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_sm"
+                    android:text="@string/everyday"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+                    app:drawableStartCompat="@drawable/ic_bell" />
             </LinearLayout>
 
             <!-- Buttons -->

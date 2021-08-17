@@ -9,12 +9,13 @@
         <entry key="app/src/main/res/drawable/ic_arrow_down.xml" value="0.2484375" />
         <entry key="app/src/main/res/drawable/ic_bar_chart.xml" value="0.2484375" />
         <entry key="app/src/main/res/drawable/ic_baseline_arrow_downward_24.xml" value="0.2484375" />
+        <entry key="app/src/main/res/drawable/ic_bell.xml" value="0.2484375" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1503623188405797" />
         <entry key="app/src/main/res/layout/activity_routine_detail.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_routine_tasks.xml" value="0.115625" />
         <entry key="app/src/main/res/layout/dialog_delete_item.xml" value="0.23177083333333334" />
-        <entry key="app/src/main/res/layout/fragment_add_routine.xml" value="0.23177083333333334" />
-        <entry key="app/src/main/res/layout/fragment_edit_routine.xml" value="0.11510416666666666" />
+        <entry key="app/src/main/res/layout/fragment_add_routine.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/fragment_edit_routine.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_routines.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_statistics.xml" value="0.115625" />
         <entry key="app/src/main/res/layout/routine_item.xml" value="0.335" />

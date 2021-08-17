@@ -13,6 +13,8 @@ import com.example.routineapplication.R;
 import com.example.routineapplication.model.Routine;
 import com.google.android.material.card.MaterialCardView;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class RoutineRecyclerAdapter extends RecyclerView.Adapter<RoutineRecyclerAdapter.RoutineViewHolder> {
@@ -37,15 +39,57 @@ public class RoutineRecyclerAdapter extends RecyclerView.Adapter<RoutineRecycler
 
     @Override
     public void onBindViewHolder(@NonNull RoutineViewHolder holder, int position) {
-        holder.routineName.setText(mRoutines.get(position).getName());
+        // Populate card view based on item data
+        Routine routine = mRoutines.get(position);
 
-        String description = mRoutines.get(position).getDescription();
+        holder.routineName.setText(routine.getName());
+
+        String description = routine.getDescription();
 
         if (description.isEmpty())
             holder.routineDescription.setVisibility(View.GONE);
         else {
             holder.routineDescription.setVisibility(View.VISIBLE);
             holder.routineDescription.setText(description);
+        }
+
+        if (!routine.isAlarmEnabled())
+            holder.routineSchedule.setVisibility(View.GONE);
+        else {
+            holder.routineSchedule.setVisibility(View.VISIBLE);
+
+            String enabledTime = routine.getEnabledTime();
+            ArrayList<Integer> enabledWeekdays = routine.getEnabledWeekdays();
+            StringBuilder builder = new StringBuilder();
+
+            if (enabledWeekdays.size() == 7)
+                builder.append("Everyday");
+            else {
+                for (Integer i : enabledWeekdays) {
+                    if (i == Calendar.MONDAY)
+                        builder.append("Mon");
+                    else if (i == Calendar.TUESDAY)
+                        builder.append("Tue");
+                    else if (i == Calendar.WEDNESDAY)
+                        builder.append("Wed");
+                    else if (i == Calendar.THURSDAY)
+                        builder.append("Thu");
+                    else if (i == Calendar.FRIDAY)
+                        builder.append("Fri");
+                    else if (i == Calendar.SATURDAY)
+                        builder.append("Sat");
+                    else if (i == Calendar.SUNDAY)
+                        builder.append("Sun");
+
+                    if (enabledWeekdays.indexOf(i) != enabledWeekdays.size() - 1)
+                        builder.append(", ");
+                }
+            }
+
+            builder.append(" at ");
+            builder.append(enabledTime);
+
+            holder.routineSchedule.setText(builder.toString());
         }
     }
 
@@ -74,6 +118,7 @@ public class RoutineRecyclerAdapter extends RecyclerView.Adapter<RoutineRecycler
         MaterialCardView card;
         TextView routineName;
         TextView routineDescription;
+        TextView routineSchedule;
         Button editButton;
         Button deleteButton;
 
@@ -83,29 +128,15 @@ public class RoutineRecyclerAdapter extends RecyclerView.Adapter<RoutineRecycler
             card = itemView.findViewById(R.id.routine_card);
             routineName = itemView.findViewById(R.id.routine_card_name);
             routineDescription = itemView.findViewById(R.id.routine_card_description);
+            routineSchedule = itemView.findViewById(R.id.routine_card_schedule);
             editButton = itemView.findViewById(R.id.edit_routine_button);
             deleteButton = itemView.findViewById(R.id.delete_routine_button);
 
-            editButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mCallback.editRoutine(mRoutines.get(getAdapterPosition()), getAdapterPosition());
-                }
-            });
+            editButton.setOnClickListener(view -> mCallback.editRoutine(mRoutines.get(getAdapterPosition()), getAdapterPosition()));
 
-            deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mCallback.deleteRoutine(mRoutines.get(getAdapterPosition()), getAdapterPosition());
-                }
-            });
+            deleteButton.setOnClickListener(view -> mCallback.deleteRoutine(mRoutines.get(getAdapterPosition()), getAdapterPosition()));
 
-            card.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mCallback.toRoutineTasks(mRoutines.get(getAdapterPosition()));
-                }
-            });
+            card.setOnClickListener(view -> mCallback.toRoutineTasks(mRoutines.get(getAdapterPosition())));
         }
     }
 }

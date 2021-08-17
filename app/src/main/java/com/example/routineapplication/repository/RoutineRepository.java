@@ -10,8 +10,15 @@ import com.example.routineapplication.data.RoutineDatabase;
 import com.example.routineapplication.model.Routine;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class RoutineRepository {
+
+    // Return value of insert() method
+    private static long id = -1;
+
+    // Thread-safe latch to wait for async insert()
+    private static CountDownLatch latch;
 
     private final RoutineDao mRoutineDao;
 
@@ -23,8 +30,17 @@ public class RoutineRepository {
         mRoutines = mRoutineDao.getAll();
     }
 
-    public void insert(Routine routine) {
+    public long insert(Routine routine) {
+        latch = new CountDownLatch(1);
+
+        // Wait for insert() to finish and update the current id
         new insertAsyncTask(mRoutineDao).execute(routine);
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return id;
     }
 
     public void update(Routine routine) {
@@ -58,7 +74,8 @@ public class RoutineRepository {
 
         @Override
         protected Void doInBackground(Routine... routines) {
-            mDao.insert(routines[0]);
+            id = mDao.insert(routines[0]);
+            latch.countDown();
             return null;
         }
     }

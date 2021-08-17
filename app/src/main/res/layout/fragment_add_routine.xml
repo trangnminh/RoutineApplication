@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="@dimen/margin_lg"
     android:orientation="vertical"
     tools:context=".view.routine.AddRoutineFragment">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/add_routine_name"
+        android:id="@+id/et_add_routine_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_lg"
-        android:layout_marginTop="@dimen/margin_md"
         android:hint="@string/name"
 
         app:errorEnabled="true"
@@ -25,10 +24,9 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/add_routine_description"
+        android:id="@+id/et_add_routine_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_lg"
         android:layout_marginTop="@dimen/margin_md"
         android:hint="@string/description">
 
@@ -37,11 +35,123 @@
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/add_routine_button"
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/sw_enable_alarm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_lg"
+        android:layout_marginTop="@dimen/margin_md"
+        android:text="@string/alarm"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Button" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/time"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/c_set_alarm_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="2dp"
+            android:clickable="true"
+            android:textAlignment="textEnd"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+    </LinearLayout>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fadeScrollbars="false"
+        android:scrollbarSize="2dp"
+        android:scrollbarThumbHorizontal="@color/primary_variant">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cg_set_alarm_weekday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_xs"
+            app:selectionRequired="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/cg_mon"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/mon"
+                app:checkedIconEnabled="true"
+                app:checkedIconTint="@color/primary" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/cg_tue"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tue"
+                app:checkedIconEnabled="true"
+                app:checkedIconTint="@color/primary" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/cg_wed"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wed"
+                app:checkedIconEnabled="true"
+                app:checkedIconTint="@color/primary" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/cg_thu"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/thu"
+                app:checkedIconEnabled="true"
+                app:checkedIconTint="@color/primary" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/cg_fri"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fri"
+                app:checkedIconEnabled="true"
+                app:checkedIconTint="@color/primary" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/cg_sat"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sat"
+                app:checkedIconEnabled="true"
+                app:checkedIconTint="@color/primary" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/cg_sun"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sun"
+                app:checkedIconEnabled="true"
+                app:checkedIconTint="@color/primary" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+    </HorizontalScrollView>
+
+    <Button
+        android:id="@+id/btn_add_routine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_md"
         android:layout_marginTop="@dimen/margin_md"
         android:text="@string/add" />
 

@@ -15,7 +15,7 @@ import java.util.List;
 public interface RoutineDao {
 
     @Insert
-    void insert(Routine routine);
+    long insert(Routine routine);
 
     @Update
     void update(Routine routine);
@@ -31,4 +31,7 @@ public interface RoutineDao {
 
     @Query("DELETE FROM routines")
     void deleteAll();
+
+    @Query("SELECT * FROM routines")
+    List<Routine> getAllForService();
 }

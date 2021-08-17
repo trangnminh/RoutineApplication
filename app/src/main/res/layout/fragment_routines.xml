@@ -53,6 +53,8 @@
             android:id="@+id/routine_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fadeScrollbars="false"
+            android:scrollbarSize="2dp"
             android:scrollbarThumbVertical="@color/primary_variant"
             android:scrollbars="vertical" />
 
@@ -65,15 +67,6 @@
             android:contentDescription="@string/fab_add_desc"
             app:srcCompat="@drawable/ic_add"
             tools:ignore="ImageContrastCheck" />
-
-        <ImageView
-            android:id="@+id/routine_recycler_indicator"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:contentDescription="@string/routine_recycler_indicator_desc"
-            android:gravity="center"
-            android:src="@drawable/ic_arrow_down" />
 
     </FrameLayout>
 

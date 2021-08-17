@@ -22,10 +22,19 @@
     <string name="cannot_undo">You cannot undo this action.</string>
 
     <string name="routine_added">Routine added!</string>
-    <string name="routine_updated">Routine updated!</string>
     <string name="routine_saved">Routine saved!</string>
     <string name="routine_deleted">Routine deleted!</string>
-    <string name="routine_recycler_indicator_desc">Bottom indicator for scrolling</string>
     <string name="wow_such_empty">Wow, such empty</string>
+    <string name="alarm">Alarm</string>
+    <string name="time">Time</string>
+    <string name="mon">Mon</string>
+    <string name="tue">Tue</string>
+    <string name="wed">Wed</string>
+    <string name="thu">Thu</string>
+    <string name="fri">Fri</string>
+    <string name="sat">Sat</string>
+    <string name="sun">Sun</string>
+    <string name="everyday">Everyday at 08:00</string>
+    <string name="alarm_time_empty">Alarm time is empty!</string>
 
 </resources>

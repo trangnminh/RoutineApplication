@@ -9,18 +9,32 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.routineapplication.R;
 import com.example.routineapplication.model.Routine;
+import com.example.routineapplication.service.AlarmHandler;
 import com.example.routineapplication.viewmodel.RoutineViewModel;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Objects;
 
 public class EditRoutineFragment extends Fragment {
 
-    TextInputLayout nameInput;
-    TextInputLayout descriptionInput;
-    Button saveButton;
+    TextInputLayout name;
+    TextInputLayout description;
+    SwitchMaterial enableAlarm;
+    Chip setAlarmTime;
+    ChipGroup setAlarmWeekday;
+    Button editRoutine;
+
+    private AlarmHandler mAlarmHandler;
 
     private Routine mRoutine;
 
@@ -44,43 +58,129 @@ public class EditRoutineFragment extends Fragment {
         }
 
         // Set up misc views
-        nameInput = view.findViewById(R.id.edit_routine_name);
-        descriptionInput = view.findViewById(R.id.edit_routine_description);
-        saveButton = view.findViewById(R.id.edit_routine_button);
+        name = view.findViewById(R.id.et_edit_routine_name);
+        description = view.findViewById(R.id.et_edit_routine_description);
+        enableAlarm = view.findViewById(R.id.sw_edit_alarm);
+        setAlarmTime = view.findViewById(R.id.c_edit_alarm_time);
+        setAlarmWeekday = view.findViewById(R.id.cg_edit_alarm_weekday);
+        editRoutine = view.findViewById(R.id.btn_edit_routine);
 
-        // Populate form fields
-        nameInput.getEditText().setText(mRoutine.getName());
-        descriptionInput.getEditText().setText(mRoutine.getDescription());
+        populateRoutineForm(view);
 
         // Set up View Model
         mViewModel = new ViewModelProvider(this).get(RoutineViewModel.class);
 
-        // Configure save function
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Gather edited input
-                String name = nameInput.getEditText().getText().toString();
-                String description = descriptionInput.getEditText().getText().toString();
+        // Set up AlarmReceiver
+        mAlarmHandler = new AlarmHandler();
 
-                // Do input check
-                if (name.isEmpty())
-                    nameInput.setError(getString(R.string.empty_error));
-                else {
-                    // Edit current routine
-                    mRoutine.setName(name);
-                    mRoutine.setDescription(description);
+        // Set up alarm time picker
+        setAlarmTime.setOnClickListener(v -> mAlarmHandler.setAlarmTime(this, setAlarmTime));
 
-                    // Update in database and tell user
-                    mViewModel.update(mRoutine);
-                    Toast.makeText(requireContext(), getString(R.string.routine_saved), Toast.LENGTH_SHORT).show();
+        // Set up add function
+        editRoutine.setOnClickListener(this::editRoutine);
 
-                    // Return to RoutinesFragment
-                    Navigation.findNavController(view)
-                            .navigate(R.id.action_editRoutineFragment_to_routinesFragment);
+        return view;
+    }
+
+    public void editRoutine(View v) {
+        String name = Objects.requireNonNull(EditRoutineFragment.this.name.getEditText()).getText().toString();
+
+        // Show error if name is empty
+        if (name.isEmpty())
+            EditRoutineFragment.this.name.setError(getString(R.string.empty_error));
+
+            // Toast if time is empty
+        else if (enableAlarm.isChecked() && setAlarmTime.getText().toString().equalsIgnoreCase(""))
+            Toast.makeText(getContext(), getString(R.string.alarm_time_empty), Toast.LENGTH_SHORT).show();
+
+            // All input is checked now
+        else {
+            // Get routine description
+            String description = Objects.requireNonNull(EditRoutineFragment.this.description.getEditText()).getText().toString();
+
+            // Check the weekdays enabled
+            List<Integer> checkedChipIds = setAlarmWeekday.getCheckedChipIds();
+            ArrayList<Integer> enabledWeekdays = getEnabledWeekdays(checkedChipIds);
+
+            // Edit current routine from current data
+            mRoutine.setName(name);
+            mRoutine.setDescription(description);
+            mRoutine.setAlarmEnabled(enableAlarm.isChecked());
+            mRoutine.setEnabledTime(setAlarmTime.getText().toString());
+            mRoutine.setEnabledWeekdays(enabledWeekdays);
+
+            // Save routine to database
+            mViewModel.update(mRoutine);
+
+            // Set repeating alarm if enabled, else cancel current alarm
+            if (enableAlarm.isChecked())
+                mAlarmHandler.setAlarm(requireContext(), setAlarmTime, mRoutine.getId(), mRoutine.getName(), mRoutine.getDescription(), mRoutine.getEnabledWeekdays());
+            else
+                mAlarmHandler.cancelAlarm(requireContext(), mRoutine.getId());
+
+            // Return to RoutinesFragment
+            NavHostFragment.findNavController(this).popBackStack();
+            Toast.makeText(requireContext(), getString(R.string.routine_saved), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Populate form based on current routine
+    public void populateRoutineForm(View view) {
+        if (mRoutine != null) {
+            Objects.requireNonNull(name.getEditText()).setText(mRoutine.getName());
+            Objects.requireNonNull(description.getEditText()).setText(mRoutine.getDescription());
+            enableAlarm.setChecked(mRoutine.isAlarmEnabled());
+            setAlarmTime.setText(mRoutine.getEnabledTime());
+
+            ArrayList<Integer> enabledWeekdays = mRoutine.getEnabledWeekdays();
+            for (Integer i : enabledWeekdays) {
+                if (i == Calendar.MONDAY) {
+                    Chip chip = view.findViewById(R.id.cg_mon_edit);
+                    chip.setChecked(true);
+                } else if (i == Calendar.TUESDAY) {
+                    Chip chip = view.findViewById(R.id.cg_tue_edit);
+                    chip.setChecked(true);
+                } else if (i == Calendar.WEDNESDAY) {
+                    Chip chip = view.findViewById(R.id.cg_wed_edit);
+                    chip.setChecked(true);
+                } else if (i == Calendar.THURSDAY) {
+                    Chip chip = view.findViewById(R.id.cg_thu_edit);
+                    chip.setChecked(true);
+                } else if (i == Calendar.FRIDAY) {
+                    Chip chip = view.findViewById(R.id.cg_fri_edit);
+                    chip.setChecked(true);
+                } else if (i == Calendar.SATURDAY) {
+                    Chip chip = view.findViewById(R.id.cg_sat_edit);
+                    chip.setChecked(true);
+                } else if (i == Calendar.SUNDAY) {
+                    Chip chip = view.findViewById(R.id.cg_sun_edit);
+                    chip.setChecked(true);
                 }
             }
-        });
-        return view;
+        }
+    }
+
+    // Helper method to get all weekday chip ids
+    public ArrayList<Integer> getEnabledWeekdays(List<Integer> checkedChipIds) {
+        ArrayList<Integer> enabledWeekdays = new ArrayList<>();
+
+        for (Integer i : checkedChipIds) {
+            if (i == R.id.cg_mon_edit)
+                enabledWeekdays.add(Calendar.MONDAY);
+            else if (i == R.id.cg_tue_edit)
+                enabledWeekdays.add(Calendar.TUESDAY);
+            else if (i == R.id.cg_wed_edit)
+                enabledWeekdays.add(Calendar.WEDNESDAY);
+            else if (i == R.id.cg_thu_edit)
+                enabledWeekdays.add(Calendar.THURSDAY);
+            else if (i == R.id.cg_fri_edit)
+                enabledWeekdays.add(Calendar.FRIDAY);
+            else if (i == R.id.cg_sat_edit)
+                enabledWeekdays.add(Calendar.SATURDAY);
+            else if (i == R.id.cg_sun_edit)
+                enabledWeekdays.add(Calendar.SUNDAY);
+        }
+
+        return enabledWeekdays;
     }
 }

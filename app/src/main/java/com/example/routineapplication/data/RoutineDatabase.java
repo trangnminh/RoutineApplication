@@ -7,11 +7,16 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.routineapplication.model.Routine;
 
-@Database(entities = {Routine.class}, version = 1, exportSchema = false)
+import java.util.ArrayList;
+import java.util.Calendar;
+
+@Database(entities = {Routine.class}, version = 2, exportSchema = false)
+@TypeConverters({RoutineConverter.class})
 public abstract class RoutineDatabase extends RoomDatabase {
 
     private static RoutineDatabase INSTANCE;
@@ -20,7 +25,7 @@ public abstract class RoutineDatabase extends RoomDatabase {
                 @Override
                 public void onOpen(@NonNull SupportSQLiteDatabase db) {
                     super.onOpen(db);
-                    new populateDbAsync(INSTANCE).execute();
+                    //new populateDbAsync(INSTANCE).execute();
                 }
             };
 
@@ -32,6 +37,7 @@ public abstract class RoutineDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             RoutineDatabase.class, "routine_database")
                             .addCallback(sCallback)
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }
@@ -51,12 +57,15 @@ public abstract class RoutineDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            // Clean slate
+            // Clean slate -ish (this does not remove the alarms!)
             mDao.deleteAll();
 
             // Populate routines
+            ArrayList<Integer> weekdays = new ArrayList<>();
+            weekdays.add(Calendar.MONDAY);
+
             for (int i = 1; i <= 5; i++) {
-                mDao.insert(new Routine(String.valueOf(i), "Sample data"));
+                mDao.insert(new Routine(String.valueOf(i), "Sample data", false, "08:00", weekdays));
             }
 
             return null;
