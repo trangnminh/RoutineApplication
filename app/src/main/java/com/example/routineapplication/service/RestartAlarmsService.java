@@ -52,6 +52,10 @@ public class RestartAlarmsService extends IntentService {
 
                     // Loop through routines to reset each alarm
                     for (Routine routine : routines) {
+
+                        // Cancel all alarms just to be sure
+                        alarmReceiver.cancelAlarm(getApplicationContext(), routine.getId());
+
                         if (routine.isAlarmEnabled()) {
                             LocalTime enabledTime = LocalTime.parse(routine.getEnabledTime());
 

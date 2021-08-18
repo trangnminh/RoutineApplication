@@ -40,6 +40,17 @@
 
         <service android:name=".service.RestartAlarmsService" />
 
+        <receiver
+            android:name=".service.TimeChangeReceiver"
+            android:enabled="true"
+            android:exported="false">
+
+            <intent-filter>
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

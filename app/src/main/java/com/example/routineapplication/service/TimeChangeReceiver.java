@@ -4,15 +4,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-// Call an Intent Service after reboot
-public class BootReceiver extends BroadcastReceiver {
+public class TimeChangeReceiver extends BroadcastReceiver {
 
-    // QUICKBOOT is not in Android docs but apparently for HTC phones?
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED) ||
-                intent.getAction().equals("android.intent.action.QUICKBOOT_POWERON")) {
+        String action = intent.getAction();
 
+        // When user manually set date time or time zone
+        if (action.equals(Intent.ACTION_TIME_CHANGED) ||
+                action.equals(Intent.ACTION_TIMEZONE_CHANGED)) {
+
+            // Restart all alarms
             Intent i = new Intent(context, RestartAlarmsService.class);
             context.startService(i);
         }
