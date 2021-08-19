@@ -18,8 +18,13 @@ public class Routine implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
+
     private String name;
     private String description;
+    private boolean isAlarmEnabled;
+    private String enabledTime;
+    private ArrayList<Integer> enabledWeekdays;
+
     public static final Creator<Routine> CREATOR = new Creator<Routine>() {
         @Override
         public Routine createFromParcel(Parcel in) {
@@ -31,9 +36,6 @@ public class Routine implements Parcelable {
             return new Routine[size];
         }
     };
-    private boolean isAlarmEnabled;
-    private String enabledTime;
-    private ArrayList<Integer> enabledWeekdays;
 
     public Routine(String name, String description, boolean isAlarmEnabled, String enabledTime, ArrayList<Integer> enabledWeekdays) {
         this.name = name;

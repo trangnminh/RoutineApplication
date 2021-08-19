@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 @Database(entities = {Routine.class}, version = 3, exportSchema = false)
-@TypeConverters({RoutineConverter.class})
+@TypeConverters({ListIntegerToStringConverter.class})
 public abstract class RoutineDatabase extends RoomDatabase {
 
     private static RoutineDatabase INSTANCE;

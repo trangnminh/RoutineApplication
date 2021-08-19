@@ -34,7 +34,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     public static final String TIME_FORMAT = "HH:mm";
     public static final String CHANNEL_ID = "routine_alarm";
     public static final String CHANNEL_TITLE = "Routine Application";
-    private static final String TAG = "AlarmReceiver";
+    public static final String TAG = "AlarmReceiver";
+    public static final long[] VIBRATION_PATTERN = {1000, 1000, 1000, 1000, 1000};
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -84,9 +85,9 @@ public class AlarmReceiver extends BroadcastReceiver {
                 new NotificationCompat.Builder(context, CHANNEL_ID)
                         .setContentTitle(title)
                         .setContentText(message)
-                        .setSmallIcon(R.drawable.ic_clock)
+                        .setSmallIcon(R.drawable.ic_loop_small)
                         .setColor(ContextCompat.getColor(context, android.R.color.transparent))
-                        .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
+                        .setVibrate(VIBRATION_PATTERN)
                         .setSound(alarmSound);
 
         // Android SDK 26 and up requires a notification channel
@@ -96,7 +97,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                         CHANNEL_TITLE,
                         NotificationManager.IMPORTANCE_HIGH);
         notificationChannel.enableVibration(true);
-        notificationChannel.setVibrationPattern(new long[]{1000, 1000, 1000, 1000, 1000});
+        notificationChannel.setVibrationPattern(VIBRATION_PATTERN);
 
         builder.setChannelId(CHANNEL_ID);
 

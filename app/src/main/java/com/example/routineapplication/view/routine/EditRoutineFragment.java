@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
@@ -30,6 +32,7 @@ public class EditRoutineFragment extends Fragment {
     TextInputLayout name;
     TextInputLayout description;
     SwitchMaterial enableAlarm;
+    TextView setTimeLabel;
     Chip setAlarmTime;
     ChipGroup setAlarmWeekday;
     Button editRoutine;
@@ -61,6 +64,7 @@ public class EditRoutineFragment extends Fragment {
         name = view.findViewById(R.id.et_edit_routine_name);
         description = view.findViewById(R.id.et_edit_routine_description);
         enableAlarm = view.findViewById(R.id.sw_edit_alarm);
+        setTimeLabel = view.findViewById(R.id.tx_edit_time_label);
         setAlarmTime = view.findViewById(R.id.c_edit_alarm_time);
         setAlarmWeekday = view.findViewById(R.id.cg_edit_alarm_weekday);
         editRoutine = view.findViewById(R.id.btn_edit_routine);
@@ -90,10 +94,12 @@ public class EditRoutineFragment extends Fragment {
             EditRoutineFragment.this.name.setError(getString(R.string.empty_error));
 
             // Toast if time is empty
-        else if (enableAlarm.isChecked() && setAlarmTime.getText().toString().equalsIgnoreCase(""))
-            Toast.makeText(getContext(), getString(R.string.alarm_time_empty), Toast.LENGTH_SHORT).show();
+        else if (enableAlarm.isChecked() && setAlarmTime.getText().toString().equalsIgnoreCase("")) {
+            setTimeLabel.setTextColor(ContextCompat.getColor(requireContext(), R.color.error));
+            setTimeLabel.setText(getString(R.string.time_asterisk));
+        }
 
-            // All input is checked now
+        // All input is checked now
         else {
             // Get routine description
             String description = Objects.requireNonNull(EditRoutineFragment.this.description.getEditText()).getText().toString();
