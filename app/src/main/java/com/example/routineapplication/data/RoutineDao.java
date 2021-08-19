@@ -23,15 +23,15 @@ public interface RoutineDao {
     @Delete
     void delete(Routine routine);
 
-    @Query("SELECT * FROM routines WHERE id =:id")
+    @Query("SELECT * FROM Routine WHERE id =:id")
     LiveData<Routine> getById(int id);
 
-    @Query("SELECT * FROM routines")
+    @Query("SELECT * FROM Routine")
     LiveData<List<Routine>> getAll();
 
-    @Query("DELETE FROM routines")
+    @Query("DELETE FROM Routine")
     void deleteAll();
 
-    @Query("SELECT * FROM routines")
+    @Query("SELECT * FROM Routine")
     List<Routine> getAllForService();
 }

@@ -13,7 +13,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity(tableName = "routines")
+@Entity(tableName = "Routine")
 public class Routine implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
