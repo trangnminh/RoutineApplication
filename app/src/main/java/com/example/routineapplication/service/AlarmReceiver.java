@@ -16,6 +16,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.routineapplication.MainActivity;
 import com.example.routineapplication.R;
 
 import java.time.LocalDateTime;
@@ -80,6 +81,10 @@ public class AlarmReceiver extends BroadcastReceiver {
                 RingtoneManager.TYPE_NOTIFICATION
         );
 
+        // Open app if notification clicked
+        Intent resultIntent = new Intent(context, MainActivity.class);
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(context, notificationId, resultIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
         // Build the notification layout
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context, CHANNEL_ID)
@@ -88,7 +93,9 @@ public class AlarmReceiver extends BroadcastReceiver {
                         .setSmallIcon(R.drawable.ic_loop_small)
                         .setColor(ContextCompat.getColor(context, android.R.color.transparent))
                         .setVibrate(VIBRATION_PATTERN)
-                        .setSound(alarmSound);
+                        .setSound(alarmSound)
+                        .setContentIntent(resultPendingIntent)
+                        .setAutoCancel(true);
 
         // Android SDK 26 and up requires a notification channel
         NotificationChannel notificationChannel =
@@ -144,7 +151,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         // Set with system Alarm Service
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        Log.i(TAG, "setOneTimeAlarm: Notification ID=" + notificationId + " at " + time);
+        Log.i(TAG, "setOneTimeAlarm: Notification ID=" + notificationId + " at " + time + " " + date);
 
     }
 
