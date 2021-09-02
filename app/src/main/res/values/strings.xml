@@ -10,13 +10,17 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
+    <string name="clone">Clone</string>
 
     <!--    Support text-->
     <string name="total">Total</string>
+    <string name="tasks">Tasks</string>
     <string name="routine">Routine</string>
+    <string name="task">Task</string>
     <string name="name">Name</string>
     <string name="description">Description</string>
     <string name="fab_add_desc">Add a new routine</string>
+    <string name="fab_add_task_desc">Add a new task to current routine</string>
     <string name="required">Required</string>
     <string name="empty_error">Field cannot be empty</string>
     <string name="cannot_undo">You cannot undo this action.</string>
@@ -38,5 +42,19 @@
     <string name="sat">Sat</string>
     <string name="sun">Sun</string>
     <string name="everyday">Everyday at 08:00</string>
+    <string name="fab_run_routine_desc">Run routine</string>
+
+    <plurals name="minute">
+        <!--
+             As a developer, you should always supply "one" and "other"
+             strings. Your translators will know which strings are actually
+             needed for their language. Always include %d in "one" because
+             translators will need to use %d for languages where "one"
+             doesn't mean 1 (as explained above).
+          -->
+        <item quantity="one">minute</item>
+        <item quantity="other">minutes</item>
+    </plurals>
+
 
 </resources>

@@ -110,7 +110,7 @@ public class RoutineRecyclerAdapter extends RecyclerView.Adapter<RoutineRecycler
 
         void deleteRoutine(Routine routine, int position);
 
-        void toRoutineTasks(Routine routine);
+        void toRoutineWithTasks(Routine routine);
     }
 
     class RoutineViewHolder extends RecyclerView.ViewHolder {
@@ -136,7 +136,7 @@ public class RoutineRecyclerAdapter extends RecyclerView.Adapter<RoutineRecycler
 
             deleteButton.setOnClickListener(view -> mCallback.deleteRoutine(mRoutines.get(getAdapterPosition()), getAdapterPosition()));
 
-            card.setOnClickListener(view -> mCallback.toRoutineTasks(mRoutines.get(getAdapterPosition())));
+            card.setOnClickListener(view -> mCallback.toRoutineWithTasks(mRoutines.get(getAdapterPosition())));
         }
     }
 }

@@ -11,12 +11,13 @@ import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.routineapplication.model.Routine;
+import com.example.routineapplication.model.Task;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
-@Database(entities = {Routine.class}, version = 3, exportSchema = false)
-@TypeConverters({ListIntegerToStringConverter.class})
+@Database(entities = {Routine.class, Task.class}, version = 9, exportSchema = false)
+@TypeConverters({ListToStringConverter.class})
 public abstract class RoutineDatabase extends RoomDatabase {
 
     private static RoutineDatabase INSTANCE;
@@ -25,7 +26,7 @@ public abstract class RoutineDatabase extends RoomDatabase {
                 @Override
                 public void onOpen(@NonNull SupportSQLiteDatabase db) {
                     super.onOpen(db);
-                    //new populateDbAsync(INSTANCE).execute();
+                    new populateDbAsync(INSTANCE).execute();
                 }
             };
 
@@ -47,26 +48,30 @@ public abstract class RoutineDatabase extends RoomDatabase {
 
     public abstract RoutineDao routineDao();
 
+    public abstract TaskDao taskDao();
+
     private static class populateDbAsync extends AsyncTask<Void, Void, Void> {
 
-        private final RoutineDao mDao;
+        private final RoutineDao mRoutineDao;
+        private final TaskDao mTaskDao;
 
         populateDbAsync(RoutineDatabase db) {
-            mDao = db.routineDao();
+            mRoutineDao = db.routineDao();
+            mTaskDao = db.taskDao();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             // Clean slate -ish (this does not remove the alarms!)
-            mDao.deleteAll();
+            mRoutineDao.deleteAll();
 
-            // Populate routines
+            // Populate routine with tasks
             ArrayList<Integer> weekdays = new ArrayList<>();
             weekdays.add(Calendar.MONDAY);
 
-            for (int i = 1; i <= 5; i++) {
-                mDao.insert(new Routine(String.valueOf(i), "Sample data", false, "08:00", weekdays));
-            }
+            int routineId = (int) mRoutineDao.insert(new Routine("Routine", "Sample", false, "08:00", weekdays));
+            mTaskDao.insert(new Task(routineId, "Task 1", 1));
+            mTaskDao.insert(new Task(routineId, "Task 2", 2));
 
             return null;
         }

@@ -128,7 +128,13 @@ public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter
     }
 
     @Override
-    public void toRoutineTasks(Routine routine) {
+    public void toRoutineWithTasks(Routine routine) {
+        // Pass the required args (here is Routine ID and name)
+        RoutinesFragmentDirections.ActionRoutinesFragmentToRoutineWithTasksFragment action =
+                RoutinesFragmentDirections.actionRoutinesFragmentToRoutineWithTasksFragment(routine.getId(), routine.getName(), routine.getDescription());
 
+        // Navigate to EditRoutineFragment
+        NavHostFragment.findNavController(this)
+                .navigate(action);
     }
 }

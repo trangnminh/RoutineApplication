@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_routinesFragment_to_editRoutineFragment"
             app:destination="@id/editRoutineFragment" />
+        <action
+            android:id="@+id/action_routinesFragment_to_routineWithTasksFragment"
+            app:destination="@id/routineWithTasksFragment" />
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
@@ -35,5 +38,20 @@
         <argument
             android:name="routine"
             app:argType="com.example.routineapplication.model.Routine" />
+    </fragment>
+    <fragment
+        android:id="@+id/routineWithTasksFragment"
+        android:name="com.example.routineapplication.view.routine.RoutineWithTasksFragment"
+        android:label="Tasks"
+        tools:layout="@layout/fragment_routine_with_tasks">
+        <argument
+            android:name="routineId"
+            app:argType="integer" />
+        <argument
+            android:name="routineName"
+            app:argType="string" />
+        <argument
+            android:name="routineDescription"
+            app:argType="string" />
     </fragment>
 </navigation>

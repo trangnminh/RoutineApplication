@@ -33,15 +33,7 @@ public class RoutineViewModel extends AndroidViewModel {
         mRepository.delete(routine);
     }
 
-    public LiveData<Routine> getById(int id) {
-        return mRepository.getById(id);
-    }
-
     public LiveData<List<Routine>> getAll() {
         return mRepository.getAll();
-    }
-
-    public void deleteAll() {
-        mRepository.deleteAll();
     }
 }

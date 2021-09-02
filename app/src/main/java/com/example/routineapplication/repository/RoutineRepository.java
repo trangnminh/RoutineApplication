@@ -51,16 +51,8 @@ public class RoutineRepository {
         new deleteAsyncTask(mRoutineDao).execute(routine);
     }
 
-    public LiveData<Routine> getById(int id) {
-        return mRoutineDao.getById(id);
-    }
-
     public LiveData<List<Routine>> getAll() {
         return mRoutines;
-    }
-
-    public void deleteAll() {
-        mRoutineDao.deleteAll();
     }
 
     // Insert routine

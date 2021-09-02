@@ -5,7 +5,7 @@ import androidx.room.TypeConverter;
 import java.util.ArrayList;
 
 // Convert an ArrayList<Integer> to a String and backwards
-public class ListIntegerToStringConverter {
+public class ListToStringConverter {
 
     @TypeConverter
     public static ArrayList<Integer> fromString(String values) {
