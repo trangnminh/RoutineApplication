@@ -24,6 +24,14 @@ public class TaskViewModel extends AndroidViewModel {
         mRepository.insert(task);
     }
 
+    public void update(Task task) {
+        mRepository.update(task);
+    }
+
+    public void delete(Task task) {
+        mRepository.delete(task);
+    }
+
     public LiveData<List<Task>> getAllByRoutineId(int routineId) {
         return mRepository.getAllByRoutineId(routineId);
     }

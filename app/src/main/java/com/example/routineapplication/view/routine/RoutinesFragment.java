@@ -130,7 +130,7 @@ public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter
         // Add a clone of the selected routine
         int cloneId = (int) mRoutineViewModel.insert(clone);
 
-        // Copy tasks of old routine to the clone
+        // Copy all tasks of old routine to the clone
         // Cannot access database in the main thread, so a Runnable task is used
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Runnable runnableTask = () -> {
@@ -162,7 +162,10 @@ public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter
                 .setPositiveButton(getString(R.string.delete), (dialogInterface, i) -> {
                     // Delete the routine and its alarm
                     mRoutineViewModel.delete(routine);
-                    mAlarmHandler.cancelAlarm(requireContext(), routine.getId());
+
+                    if (routine.isAlarmEnabled())
+                        mAlarmHandler.cancelAlarm(requireContext(), routine.getId());
+
                     mAdapter.notifyItemRemoved(position);
                     Toast.makeText(requireContext(), getString(R.string.routine_deleted), Toast.LENGTH_SHORT).show();
                 })

@@ -1,5 +1,6 @@
 package com.example.routineapplication.view.routine;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,6 +87,7 @@ public class AddRoutineFragment extends Fragment {
             // Toast if time is empty
         else if (enableAlarm.isChecked() && setAlarmTime.getText().toString().equalsIgnoreCase("")) {
             setTimeLabel.setTextColor(ContextCompat.getColor(requireContext(), R.color.error));
+            setTimeLabel.setTypeface(setTimeLabel.getTypeface(), Typeface.BOLD);
             setTimeLabel.setText(getString(R.string.time_asterisk));
         }
 

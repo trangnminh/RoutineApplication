@@ -1,7 +1,6 @@
 package com.example.routineapplication.repository;
 
 import android.app.Application;
-import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
@@ -11,6 +10,8 @@ import com.example.routineapplication.model.Routine;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class RoutineRepository {
 
@@ -21,20 +22,27 @@ public class RoutineRepository {
     private static CountDownLatch latch;
 
     private final RoutineDao mRoutineDao;
+    private final ExecutorService mExecutorService;
 
     private final LiveData<List<Routine>> mRoutines;
 
     public RoutineRepository(Application application) {
         RoutineDatabase db = RoutineDatabase.getDatabase(application);
         mRoutineDao = db.routineDao();
+        mExecutorService = Executors.newCachedThreadPool();
         mRoutines = mRoutineDao.getAll();
     }
 
     public long insert(Routine routine) {
         latch = new CountDownLatch(1);
 
+        Runnable runnable = () -> {
+            id = mRoutineDao.insert(routine);
+            latch.countDown();
+        };
+        mExecutorService.execute(runnable);
+
         // Wait for insert() to finish and update the current id
-        new insertAsyncTask(mRoutineDao).execute(routine);
         try {
             latch.await();
         } catch (InterruptedException e) {
@@ -44,63 +52,16 @@ public class RoutineRepository {
     }
 
     public void update(Routine routine) {
-        new updateAsyncTask(mRoutineDao).execute(routine);
+        Runnable runnable = () -> mRoutineDao.update(routine);
+        mExecutorService.execute(runnable);
     }
 
     public void delete(Routine routine) {
-        new deleteAsyncTask(mRoutineDao).execute(routine);
+        Runnable runnable = () -> mRoutineDao.delete(routine);
+        mExecutorService.execute(runnable);
     }
 
     public LiveData<List<Routine>> getAll() {
         return mRoutines;
-    }
-
-    // Insert routine
-    private static class insertAsyncTask extends AsyncTask<Routine, Void, Void> {
-
-        private final RoutineDao mDao;
-
-        insertAsyncTask(RoutineDao dao) {
-            this.mDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(Routine... routines) {
-            id = mDao.insert(routines[0]);
-            latch.countDown();
-            return null;
-        }
-    }
-
-    // Update routine
-    private static class updateAsyncTask extends AsyncTask<Routine, Void, Void> {
-
-        private final RoutineDao mDao;
-
-        updateAsyncTask(RoutineDao dao) {
-            this.mDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(Routine... routines) {
-            mDao.update(routines[0]);
-            return null;
-        }
-    }
-
-    // Delete routine
-    private static class deleteAsyncTask extends AsyncTask<Routine, Void, Void> {
-
-        private final RoutineDao mDao;
-
-        deleteAsyncTask(RoutineDao dao) {
-            this.mDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(Routine... routines) {
-            mDao.delete(routines[0]);
-            return null;
-        }
     }
 }

@@ -19,7 +19,9 @@ import androidx.core.content.ContextCompat;
 import com.example.routineapplication.MainActivity;
 import com.example.routineapplication.R;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,13 +52,14 @@ public class AlarmReceiver extends BroadcastReceiver {
             // Show notification if today is enabled
             Calendar calendar = Calendar.getInstance();
             Integer today = calendar.get(Calendar.DAY_OF_WEEK);
-            if (weekdays.contains(today))
+            if (weekdays.contains(today)) {
                 showNotification(context, notificationId, title, message);
 
-            // Wake the screen (needs permission WAKELOCK)
-            PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-            PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "routine:wakelock");
-            wakeLock.acquire(5 * 60 * 1000L /*5 minutes*/);
+                // Wake the screen (needs permission WAKELOCK)
+                PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+                PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "routine:wakelock");
+                wakeLock.acquire(5 * 60 * 1000L /*5 minutes*/);
+            }
 
             // Set the next alarm
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
@@ -150,9 +153,17 @@ public class AlarmReceiver extends BroadcastReceiver {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Set with system Alarm Service
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        Log.i(TAG, "setOneTimeAlarm: Notification ID=" + notificationId + " at " + time + " " + date);
+        long triggerMillis = calendar.getTimeInMillis();
 
+        if (calendar.getTimeInMillis() <= System.currentTimeMillis())
+            // If alarm time has already passed, add one day to trigger time
+            triggerMillis += 86400000L;
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT + " " + TIME_FORMAT);
+        LocalDateTime triggerDateTime = Instant.ofEpochMilli(triggerMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerMillis, pendingIntent);
+        Log.i(TAG, "setOneTimeAlarm: Notification ID=" + notificationId + " at " + dateFormatter.format(triggerDateTime));
     }
 
     public void cancelAlarm(Context context, int notificationId) {

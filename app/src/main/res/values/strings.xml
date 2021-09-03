@@ -21,6 +21,7 @@
     <string name="description">Description</string>
     <string name="fab_add_desc">Add a new routine</string>
     <string name="fab_add_task_desc">Add a new task to current routine</string>
+    <string name="fab_run_routine_desc">Start current routine</string>
     <string name="required">Required</string>
     <string name="empty_error">Field cannot be empty</string>
     <string name="cannot_undo">You cannot undo this action.</string>
@@ -29,6 +30,8 @@
     <string name="routine_saved">Routine saved</string>
     <string name="routine_deleted">Routine deleted</string>
     <string name="wow_such_empty">Wow, such empty</string>
+    <string name="task_added">Task added</string>
+    <string name="task_deleted">Task deleted</string>
 
     <!--    Labels-->
     <string name="alarm">Alarm</string>
@@ -42,7 +45,6 @@
     <string name="sat">Sat</string>
     <string name="sun">Sun</string>
     <string name="everyday">Everyday at 08:00</string>
-    <string name="fab_run_routine_desc">Run routine</string>
 
     <plurals name="minute">
         <!--
@@ -55,6 +57,5 @@
         <item quantity="one">minute</item>
         <item quantity="other">minutes</item>
     </plurals>
-
 
 </resources>
