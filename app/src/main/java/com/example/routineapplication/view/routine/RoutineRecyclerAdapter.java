@@ -108,6 +108,8 @@ public class RoutineRecyclerAdapter extends RecyclerView.Adapter<RoutineRecycler
     public interface RoutineRecyclerCallback {
         void editRoutine(Routine routine, int position);
 
+        void cloneRoutine(Routine routine, int position);
+
         void deleteRoutine(Routine routine, int position);
 
         void toRoutineWithTasks(Routine routine);
@@ -120,6 +122,7 @@ public class RoutineRecyclerAdapter extends RecyclerView.Adapter<RoutineRecycler
         TextView routineDescription;
         TextView routineSchedule;
         Button editButton;
+        Button cloneButton;
         Button deleteButton;
 
         public RoutineViewHolder(@NonNull View itemView) {
@@ -130,10 +133,11 @@ public class RoutineRecyclerAdapter extends RecyclerView.Adapter<RoutineRecycler
             routineDescription = itemView.findViewById(R.id.routine_card_description);
             routineSchedule = itemView.findViewById(R.id.routine_card_schedule);
             editButton = itemView.findViewById(R.id.edit_routine_button);
+            cloneButton = itemView.findViewById(R.id.clone_routine_button);
             deleteButton = itemView.findViewById(R.id.delete_routine_button);
 
             editButton.setOnClickListener(view -> mCallback.editRoutine(mRoutines.get(getAdapterPosition()), getAdapterPosition()));
-
+            cloneButton.setOnClickListener(view -> mCallback.cloneRoutine(mRoutines.get(getAdapterPosition()), getAdapterPosition()));
             deleteButton.setOnClickListener(view -> mCallback.deleteRoutine(mRoutines.get(getAdapterPosition()), getAdapterPosition()));
 
             card.setOnClickListener(view -> mCallback.toRoutineWithTasks(mRoutines.get(getAdapterPosition())));

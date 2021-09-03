@@ -28,6 +28,10 @@ public class TaskRepository {
         return mTaskDao.getAllByRoutineId(routineId);
     }
 
+    public List<Task> getAllByRoutineIdForClone(int routineId) {
+        return mTaskDao.getAllByRoutineIdForClone(routineId);
+    }
+
     private static class insertAsyncTask extends AsyncTask<Task, Void, Void> {
 
         private final TaskDao mDao;

@@ -54,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fadeScrollbars="false"
-            android:scrollbarSize="2dp"
+            android:scrollbarSize="4dp"
             android:scrollbarThumbVertical="@color/primary_variant"
             android:scrollbars="vertical" />
 

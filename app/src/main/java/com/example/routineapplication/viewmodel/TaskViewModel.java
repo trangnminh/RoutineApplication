@@ -20,7 +20,15 @@ public class TaskViewModel extends AndroidViewModel {
         this.mRepository = new TaskRepository(application);
     }
 
+    public void insert(Task task) {
+        mRepository.insert(task);
+    }
+
     public LiveData<List<Task>> getAllByRoutineId(int routineId) {
         return mRepository.getAllByRoutineId(routineId);
+    }
+
+    public List<Task> getAllByRoutineIdForClone(int routineId) {
+        return mRepository.getAllByRoutineIdForClone(routineId);
     }
 }

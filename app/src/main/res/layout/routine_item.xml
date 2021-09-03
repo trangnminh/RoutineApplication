@@ -73,6 +73,14 @@
                     android:text="@string/edit" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/clone_routine_button"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_sm"
+                    android:text="@string/clone" />
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/delete_routine_button"
                     style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"

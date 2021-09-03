@@ -21,6 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_lg"
+        android:layout_marginTop="@dimen/margin_sm"
         android:text="@string/description"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" />
 
@@ -28,7 +29,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_lg"
-        android:layout_marginVertical="@dimen/margin_sm"
+        android:layout_marginTop="@dimen/margin_xs"
+        android:layout_marginBottom="@dimen/margin_md"
         android:orientation="horizontal">
 
         <TextView
@@ -62,7 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fadeScrollbars="false"
-            android:scrollbarSize="2dp"
+            android:scrollbarSize="4dp"
             android:scrollbarThumbVertical="@color/primary_variant"
             android:scrollbars="vertical">
 

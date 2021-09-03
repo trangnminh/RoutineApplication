@@ -1,6 +1,7 @@
 package com.example.routineapplication.view.routine;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +17,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.routineapplication.R;
 import com.example.routineapplication.model.Routine;
+import com.example.routineapplication.model.Task;
 import com.example.routineapplication.service.AlarmHandler;
 import com.example.routineapplication.viewmodel.RoutineViewModel;
+import com.example.routineapplication.viewmodel.TaskViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter.RoutineRecyclerCallback {
+
+    private static final String TAG = "RoutinesFragment";
 
     TextView totalRoutines;
     FloatingActionButton fab;
@@ -32,7 +41,8 @@ public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter
 
     private AlarmHandler mAlarmHandler;
 
-    private RoutineViewModel mViewModel;
+    private RoutineViewModel mRoutineViewModel;
+    private TaskViewModel mTaskViewModel;
 
     public RoutinesFragment() {
         // Required empty public constructor
@@ -63,13 +73,14 @@ public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter
         wowSuchEmpty = view.findViewById(R.id.wow_such_empty);
 
         // Set up View Model (must do before Recycler View)
-        mViewModel = new ViewModelProvider(this).get(RoutineViewModel.class);
+        mRoutineViewModel = new ViewModelProvider(this).get(RoutineViewModel.class);
+        mTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
         // Set up AlarmReceiver
         mAlarmHandler = new AlarmHandler();
 
         // Observe and react to data change (in ViewModel.getAll())
-        mViewModel.getAll().observe(getViewLifecycleOwner(), routines -> {
+        mRoutineViewModel.getAll().observe(getViewLifecycleOwner(), routines -> {
             // Update cached data
             mAdapter.setRoutines(routines);
 
@@ -86,7 +97,7 @@ public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter
 
         // Set up Recycler View
         recyclerView = view.findViewById(R.id.routine_recycler);
-        mAdapter = new RoutineRecyclerAdapter(mViewModel.getAll().getValue(), this);
+        mAdapter = new RoutineRecyclerAdapter(mRoutineViewModel.getAll().getValue(), this);
 
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -107,6 +118,39 @@ public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter
     }
 
     @Override
+    public void cloneRoutine(Routine routine, int position) {
+        // Create new routine from current data
+        Routine clone = new Routine(
+                routine.getName() + " clone",
+                routine.getDescription(),
+                false,
+                routine.getEnabledTime(),
+                routine.getEnabledWeekdays());
+
+        // Add a clone of the selected routine
+        int cloneId = (int) mRoutineViewModel.insert(clone);
+
+        // Copy tasks of old routine to the clone
+        // Cannot access database in the main thread, so a Runnable task is used
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Runnable runnableTask = () -> {
+            try {
+                List<Task> tasks = mTaskViewModel.getAllByRoutineIdForClone(routine.getId());
+                Log.i(TAG, "cloneRoutine: Cloned from Routine ID=" + routine.getId() + " Number of Tasks=" + tasks.size());
+
+                // Add cloned tasks to database for cloned routine
+                for (Task task : tasks)
+                    mTaskViewModel.insert(new Task(cloneId, task.getName(), task.getDurationInMinutes()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        };
+        executorService.execute(runnableTask);
+
+        Toast.makeText(requireContext(), getString(R.string.routine_added), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void deleteRoutine(Routine routine, int position) {
         String routineName = routine.getName();
 
@@ -117,7 +161,7 @@ public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter
                 .setMessage(getString(R.string.cannot_undo))
                 .setPositiveButton(getString(R.string.delete), (dialogInterface, i) -> {
                     // Delete the routine and its alarm
-                    mViewModel.delete(routine);
+                    mRoutineViewModel.delete(routine);
                     mAlarmHandler.cancelAlarm(requireContext(), routine.getId());
                     mAdapter.notifyItemRemoved(position);
                     Toast.makeText(requireContext(), getString(R.string.routine_deleted), Toast.LENGTH_SHORT).show();

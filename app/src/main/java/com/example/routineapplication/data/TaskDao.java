@@ -19,6 +19,9 @@ public interface TaskDao {
     @Query("SELECT * FROM Task WHERE routineId=:routineId")
     LiveData<List<Task>> getAllByRoutineId(int routineId);
 
+    @Query("SELECT * FROM Task WHERE routineId=:routineId")
+    List<Task> getAllByRoutineIdForClone(int routineId);
+
     @Query("DELETE FROM Task")
     void deleteAll();
 }
