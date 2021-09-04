@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Button.IconOnly" parent="Widget.MaterialComponents.Button">
+    <style name="ButtonIconOnly" parent="Widget.MaterialComponents.Button">
         <item name="iconPadding">0dp</item>
         <item name="iconTint">@color/primary</item>
         <item name="backgroundTint">@color/white</item>
@@ -11,6 +11,14 @@
         <item name="android:paddingRight">8dp</item>
         <item name="android:minWidth">24dp</item>
         <item name="android:minHeight">24dp</item>
+    </style>
+
+    <style name="PopUpMenu" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
+        <item name="android:textAppearanceLargePopupMenu">
+            @style/TextAppearance.MaterialComponents.Body2
+        </item>
+        <item name="android:textAppearanceSmall">@style/TextAppearance.MaterialComponents.Body2
+        </item>
     </style>
 
 </resources>

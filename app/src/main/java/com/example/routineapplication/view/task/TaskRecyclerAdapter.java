@@ -1,7 +1,9 @@
 package com.example.routineapplication.view.task;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,7 +93,9 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
             optionsButton = itemView.findViewById(R.id.task_options_button);
 
             optionsButton.setOnClickListener(view -> {
-                PopupMenu popupMenu = new PopupMenu(view.getContext(), optionsButton);
+                // Use wrapper to apply theme to menu
+                Context wrapper = new ContextThemeWrapper(view.getContext(), R.style.PopUpMenu);
+                PopupMenu popupMenu = new PopupMenu(wrapper, optionsButton);
                 popupMenu.getMenuInflater().inflate(R.menu.task_item_menu, popupMenu.getMenu());
 
                 // PopUp menu does not support icons

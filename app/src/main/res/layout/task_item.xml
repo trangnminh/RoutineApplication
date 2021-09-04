@@ -58,7 +58,7 @@
 
         <Button
             android:id="@+id/task_options_button"
-            style="@style/Button.IconOnly"
+            style="@style/ButtonIconOnly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
