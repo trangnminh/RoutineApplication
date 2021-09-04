@@ -1,4 +1,4 @@
-package com.example.routineapplication.view.routine;
+package com.example.routineapplication.view.task;
 
 import android.content.res.Resources;
 import android.view.LayoutInflater;

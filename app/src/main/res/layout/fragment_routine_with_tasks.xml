@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.routine.RoutineWithTasksFragment">
+    tools:context=".view.task.RoutineWithTasksFragment">
 
     <TextView
         android:id="@+id/routine_with_tasks_name"
