@@ -9,9 +9,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 public class MainActivity extends AppCompatActivity {
 
     Toolbar toolbar;
@@ -32,21 +29,6 @@ public class MainActivity extends AppCompatActivity {
                     new AppBarConfiguration.Builder(navController.getGraph()).build();
             toolbar = findViewById(R.id.toolbar);
             NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
-
-            showDateTime();
-
-            // Handle navigation changes
-            navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {
-                if (navDestination.getId() == R.id.routinesFragment)
-                    showDateTime();
-            });
         }
-    }
-
-    private void showDateTime() {
-        // Show current date time on home Toolbar
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("E, MMM dd yyyy");
-        LocalDateTime now = LocalDateTime.now();
-        toolbar.setTitle(dtf.format(now));
     }
 }

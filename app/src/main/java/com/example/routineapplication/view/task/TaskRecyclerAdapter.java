@@ -1,10 +1,12 @@
 package com.example.routineapplication.view.task;
 
 import android.content.res.Resources;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -77,9 +79,7 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
         TextView taskName;
         TextView taskDurationInMinutes;
         TextView taskDurationInMinutesUnit;
-        Button editButton;
-        Button cloneButton;
-        Button deleteButton;
+        Button optionsButton;
 
         public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -88,13 +88,32 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
             taskName = itemView.findViewById(R.id.task_card_name);
             taskDurationInMinutes = itemView.findViewById(R.id.task_card_duration);
             taskDurationInMinutesUnit = itemView.findViewById(R.id.task_card_duration_unit);
-            editButton = itemView.findViewById(R.id.edit_task_button);
-            cloneButton = itemView.findViewById(R.id.clone_task_button);
-            deleteButton = itemView.findViewById(R.id.delete_task_button);
+            optionsButton = itemView.findViewById(R.id.task_options_button);
 
-            editButton.setOnClickListener(view -> mCallback.editTask(mTasks.get(getAdapterPosition()), getAdapterPosition()));
-            cloneButton.setOnClickListener(view -> mCallback.cloneTask(mTasks.get(getAdapterPosition()), getAdapterPosition()));
-            deleteButton.setOnClickListener(view -> mCallback.deleteTask(mTasks.get(getAdapterPosition()), getAdapterPosition()));
+            optionsButton.setOnClickListener(view -> {
+                PopupMenu popupMenu = new PopupMenu(view.getContext(), optionsButton);
+                popupMenu.getMenuInflater().inflate(R.menu.task_item_menu, popupMenu.getMenu());
+
+                // PopUp menu does not support icons
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                    popupMenu.setForceShowIcon(true);
+
+                // Handle each menu option
+                popupMenu.setOnMenuItemClickListener(menuItem -> {
+                    if (menuItem.getItemId() == R.id.task_option_edit)
+                        mCallback.editTask(mTasks.get(getAdapterPosition()), getAdapterPosition());
+
+                    if (menuItem.getItemId() == R.id.task_option_clone)
+                        mCallback.cloneTask(mTasks.get(getAdapterPosition()), getAdapterPosition());
+
+                    if (menuItem.getItemId() == R.id.task_option_delete)
+                        mCallback.deleteTask(mTasks.get(getAdapterPosition()), getAdapterPosition());
+
+                    return false;
+                });
+
+                popupMenu.show();
+            });
         }
     }
 }

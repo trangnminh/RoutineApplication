@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/routinesFragment"
         android:name="com.example.routineapplication.view.routine.RoutinesFragment"
-        android:label=""
+        android:label="Routines"
         tools:layout="@layout/fragment_routines">
         <action
             android:id="@+id/action_routinesFragment_to_addRoutineFragment"
@@ -17,8 +17,8 @@
             android:id="@+id/action_routinesFragment_to_editRoutineFragment"
             app:destination="@id/editRoutineFragment" />
         <action
-            android:id="@+id/action_routinesFragment_to_routineWithTasksFragment"
-            app:destination="@id/routineWithTasksFragment" />
+            android:id="@+id/action_routinesFragment_to_routineDetailsFragment"
+            app:destination="@id/routineDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/addRoutineFragment"
@@ -35,10 +35,10 @@
             app:argType="com.example.routineapplication.model.Routine" />
     </fragment>
     <fragment
-        android:id="@+id/routineWithTasksFragment"
-        android:name="com.example.routineapplication.view.task.RoutineWithTasksFragment"
-        android:label="Tasks"
-        tools:layout="@layout/fragment_routine_with_tasks">
+        android:id="@+id/routineDetailsFragment"
+        android:name="com.example.routineapplication.view.routine.RoutineDetailsFragment"
+        android:label=""
+        tools:layout="@layout/fragment_routine_details">
         <argument
             android:name="routineId"
             app:argType="integer" />
@@ -49,4 +49,14 @@
             android:name="routineDescription"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/routineWithTasksFragment"
+        android:name="com.example.routineapplication.view.task.RoutineWithTasksFragment"
+        android:label="fragment_routine_with_tasks"
+        tools:layout="@layout/fragment_routine_with_tasks" />
+    <fragment
+        android:id="@+id/routineStatisticsFragment"
+        android:name="com.example.routineapplication.view.statistics.RoutineStatisticsFragment"
+        android:label="fragment_routine_statistics"
+        tools:layout="@layout/fragment_routine_statistics" />
 </navigation>

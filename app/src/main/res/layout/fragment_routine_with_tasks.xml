@@ -1,105 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".view.task.RoutineWithTasksFragment">
 
     <TextView
-        android:id="@+id/routine_with_tasks_name"
+        android:id="@+id/wow_such_empty"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_lg"
-        android:layout_marginTop="@dimen/margin_md"
-        android:text="@string/name"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4" />
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/wow_such_empty"
+        android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/routine_with_tasks_description"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/task_recycler"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_lg"
-        android:layout_marginTop="@dimen/margin_sm"
-        android:text="@string/description"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" />
+        android:layout_height="match_parent"
+        android:fadeScrollbars="false"
+        android:scrollbarSize="4dp"
+        android:scrollbarThumbVertical="@color/primary_variant"
+        android:scrollbars="vertical">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_lg"
-        android:layout_marginTop="@dimen/margin_xs"
-        android:layout_marginBottom="@dimen/margin_md"
-        android:orientation="horizontal">
+        android:layout_gravity="bottom|end"
+        android:orientation="vertical">
 
-        <TextView
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/run_routine_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tasks"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
+            android:layout_marginHorizontal="@dimen/margin_md"
+            android:backgroundTint="@color/primary"
+            android:contentDescription="@string/fab_run_routine_desc"
+            app:rippleColor="@color/primary_dark"
+            app:srcCompat="@drawable/ic_play"
+            app:tint="@color/on_primary"
+            tools:ignore="ImageContrastCheck" />
 
-        <TextView
-            android:id="@+id/total_tasks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_md"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" />
-    </LinearLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/wow_such_empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/wow_such_empty"
-            android:visibility="gone" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/task_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fadeScrollbars="false"
-            android:scrollbarSize="4dp"
-            android:scrollbarThumbVertical="@color/primary_variant"
-            android:scrollbars="vertical">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
-        <LinearLayout
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_task_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:orientation="vertical">
+            android:layout_margin="@dimen/margin_md"
+            android:contentDescription="@string/fab_add_task_desc"
+            app:srcCompat="@drawable/ic_add"
+            tools:ignore="ImageContrastCheck" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/run_routine_fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_md"
-                android:backgroundTint="@color/primary"
-                android:contentDescription="@string/fab_run_routine_desc"
-                app:rippleColor="@color/primary_dark"
-                app:srcCompat="@drawable/ic_play"
-                app:tint="@color/on_primary"
-                tools:ignore="ImageContrastCheck" />
+    </LinearLayout>
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/add_task_fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="@dimen/margin_md"
-                android:contentDescription="@string/fab_add_task_desc"
-                app:srcCompat="@drawable/ic_add"
-                tools:ignore="ImageContrastCheck" />
-
-        </LinearLayout>
-
-    </FrameLayout>
-
-</LinearLayout>
+</FrameLayout>

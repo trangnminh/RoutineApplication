@@ -32,7 +32,6 @@ public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter
 
     private static final String TAG = "RoutinesFragment";
 
-    TextView totalRoutines;
     FloatingActionButton fab;
     TextView wowSuchEmpty;
 
@@ -68,7 +67,6 @@ public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter
         View view = inflater.inflate(R.layout.fragment_routines, container, false);
 
         // Set up misc view
-        totalRoutines = view.findViewById(R.id.total_routines);
         fab = view.findViewById(R.id.routine_fab);
         wowSuchEmpty = view.findViewById(R.id.wow_such_empty);
 
@@ -91,8 +89,6 @@ public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter
                 wowSuchEmpty.setVisibility(View.VISIBLE);
             else
                 wowSuchEmpty.setVisibility(View.GONE);
-
-            totalRoutines.setText(String.valueOf(itemCount));
         });
 
         // Set up Recycler View
@@ -175,12 +171,12 @@ public class RoutinesFragment extends Fragment implements RoutineRecyclerAdapter
     }
 
     @Override
-    public void toRoutineWithTasks(Routine routine) {
-        // Pass the required args (here is Routine ID and name)
-        RoutinesFragmentDirections.ActionRoutinesFragmentToRoutineWithTasksFragment action =
-                RoutinesFragmentDirections.actionRoutinesFragmentToRoutineWithTasksFragment(routine.getId(), routine.getName(), routine.getDescription());
+    public void toRoutineDetails(Routine routine) {
+        // Pass the required args (here is Routine ID, name, and description)
+        RoutinesFragmentDirections.ActionRoutinesFragmentToRoutineDetailsFragment action =
+                RoutinesFragmentDirections.actionRoutinesFragmentToRoutineDetailsFragment(routine.getId(), routine.getName(), routine.getDescription());
 
-        // Navigate to EditRoutineFragment
+        // Navigate to RoutineDetailsFragment
         NavHostFragment.findNavController(this)
                 .navigate(action);
     }
